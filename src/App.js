@@ -1,30 +1,47 @@
 import React, { Component } from 'react'
-import Card from './Card'
-import GuessCount from './GuessCount'
+import shuffle from 'lodash.shuffle'
+
 import './App.css'
 
+import Card from './Card'
+import GuessCount from './GuessCount'
+
+const SIDE = 6
+const SYMBOLS = '😀🎉💖🎩🐶🐱🦄🐬🌍🌛🌞💫🍎🍌🍓🍐🍟🍿'
+
 class App extends Component {
+  cards = this.generateCards()
 
-	handleCardClick(card){
-		console.log(card, 'clicked');
-	}
+  generateCards() {
+    const result = []
+    const size = SIDE * SIDE
+    const candidates = shuffle(SYMBOLS)
+    while (result.length < size) {
+      const card = candidates.pop()
+      result.push(card, card)
+    }
+    return shuffle(result)
+  }
 
-	render() {
-		const won = new Date().getSeconds() % 2 === 0
-		return (
-			<div className="memory" >
-				<GuessCount guesses={0} />
-				<Card card="a" feedback="hidden" onClick={this.handleCardClick} />
-				<Card card="b" feedback="justMatched" onClick={this.handleCardClick} />
-				<Card card="c" feedback="justMismatched" onClick={this.handleCardClick} />
-				<Card card="d" feedback="visible" onClick={this.handleCardClick} />
-				<Card card="e" feedback="hidden" onClick={this.handleCardClick} />
-				<Card card="f" feedback="justMatched" onClick={this.handleCardClick} />
+  handleCardClick(card) {
+    console.log(card, 'clicked')
+  }
 
-				{won && <p>GAGNÉ !</p>}
-			</div>
-		)
-  	}
+  render() {
+    const won = new Date().getSeconds() % 2 === 0
+    return (
+      <div className="memory">
+        <GuessCount guesses={0} />
+        <Card card="😀" feedback="hidden" onClick={this.handleCardClick} />
+        <Card card="🎉" feedback="justMatched" onClick={this.handleCardClick} />
+        <Card card="💖" feedback="justMismatched" onClick={this.handleCardClick} />
+        <Card card="🎩" feedback="visible" onClick={this.handleCardClick} />
+        <Card card="🐶" feedback="hidden" onClick={this.handleCardClick} />
+        <Card card="🐱" feedback="justMatched" onClick={this.handleCardClick} />
+        {won && <p>GAGNÉ !</p>}
+      </div>
+    )
+  }
 }
 
 export default App
